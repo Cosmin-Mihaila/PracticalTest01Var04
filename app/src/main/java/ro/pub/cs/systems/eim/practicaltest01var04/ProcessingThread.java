@@ -29,6 +29,7 @@ public class ProcessingThread extends Thread {
         while (isRunning) {
             sendMessage();
             sleep();
+            sendMessage2();
         }
         Log.d("cosm", "Thread has stopped!");
     }
@@ -37,7 +38,15 @@ public class ProcessingThread extends Thread {
         Intent intent = new Intent();
         intent.setAction(Constants.actionTypes[random.nextInt(Constants.actionTypes.length)]);
         intent.putExtra(Constants.BROADCAST_RECEIVER_EXTRA,
-                "Numele si grupa: " + nume + " " + grupa);
+                "Numele " + nume);
+        context.sendBroadcast(intent);
+    }
+
+    private void sendMessage2() {
+        Intent intent = new Intent();
+        intent.setAction(Constants.actionTypes[random.nextInt(Constants.actionTypes.length)]);
+        intent.putExtra(Constants.BROADCAST_RECEIVER_EXTRA,
+                "grupa: " + grupa);
         context.sendBroadcast(intent);
     }
 

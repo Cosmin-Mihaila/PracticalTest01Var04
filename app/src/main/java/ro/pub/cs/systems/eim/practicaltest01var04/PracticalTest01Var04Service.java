@@ -3,6 +3,7 @@ package ro.pub.cs.systems.eim.practicaltest01var04;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -14,6 +15,7 @@ public class PracticalTest01Var04Service extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String nume = intent.getStringExtra("nume");
         String grupa = intent.getStringExtra("nume");
+        Log.d("aici", "dada");
         processingThread = new ProcessingThread(this, nume, grupa);
         processingThread.start();
         return Service.START_REDELIVER_INTENT;
