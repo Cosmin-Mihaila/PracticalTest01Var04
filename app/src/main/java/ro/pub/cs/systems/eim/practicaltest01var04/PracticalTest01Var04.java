@@ -2,8 +2,11 @@ package ro.pub.cs.systems.eim.practicaltest01var04;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -27,6 +30,7 @@ public class PracticalTest01Var04 extends AppCompatActivity {
         editText1 = findViewById(R.id.editText1);
         editText2 = findViewById(R.id.editText2);
         checkBox1 = findViewById(R.id.checkBox1);
+
         checkBox2 = findViewById(R.id.checkBox2);
 
         button2.setOnClickListener(v -> {
@@ -58,8 +62,105 @@ public class PracticalTest01Var04 extends AppCompatActivity {
                     full = full + secondText;
                 }
             }
-            textView.setText(String.valueOf(full));
+            textView.setText(full);
+
+            Intent intent = new Intent(getApplicationContext(), PracticalTest01Var04Service.class);
+            intent.putExtra("nume", editText1.getText().toString());
+            intent.putExtra("grupa", editText2.getText().toString());
+            getApplicationContext().startService(intent);
+//                serviceStatus = Constants.SERVICE_STARTED;
         });
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("nume")){
+                editText1.setText(savedInstanceState.getString("nume"));
+            } else {
+                editText1.setText(String.valueOf(0));
+            }
+            if (savedInstanceState.containsKey("grupa")){
+                editText2.setText(savedInstanceState.getString("grupa"));
+            } else {
+                editText2.setText(String.valueOf(0));
+            }
+            if (savedInstanceState.containsKey("textView")){
+                textView.setText(savedInstanceState.getString("textView"));
+            } else {
+                textView.setText(String.valueOf(0));
+            }
+            if (savedInstanceState.containsKey("checkbox1")){
+                checkBox1.setChecked(Boolean.parseBoolean(savedInstanceState.getString("checkbox1")));
+            } else {
+                checkBox1.setChecked(false);
+            }
+            if (savedInstanceState.containsKey("checkbox2")){
+                checkBox2.setChecked(Boolean.parseBoolean(savedInstanceState.getString("checkbox2")));
+            } else {
+                checkBox2.setChecked(false);
+            }
+
+        } else {
+            editText1.setText(String.valueOf(0));
+            editText2.setText(String.valueOf(0));
+            textView.setText(String.valueOf(0));
+            checkBox1.setChecked(false);
+            checkBox2.setChecked(false);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("nume")){
+                editText1.setText(savedInstanceState.getString("nume"));
+            } else {
+                editText1.setText(String.valueOf(0));
+            }
+            if (savedInstanceState.containsKey("grupa")){
+                editText2.setText(savedInstanceState.getString("grupa"));
+            } else {
+                editText2.setText(String.valueOf(0));
+            }
+            if (savedInstanceState.containsKey("textView")){
+                textView.setText(savedInstanceState.getString("textView"));
+            } else {
+                textView.setText(String.valueOf(0));
+            }
+            if (savedInstanceState.containsKey("checkbox1")){
+                checkBox1.setChecked(Boolean.parseBoolean(savedInstanceState.getString("checkbox1")));
+            } else {
+                checkBox1.setChecked(false);
+            }
+            if (savedInstanceState.containsKey("checkbox2")){
+                checkBox2.setChecked(Boolean.parseBoolean(savedInstanceState.getString("checkbox2")));
+            } else {
+                checkBox2.setChecked(false);
+            }
+
+        } else {
+            editText1.setText(String.valueOf(0));
+            editText2.setText(String.valueOf(0));
+            textView.setText(String.valueOf(0));
+            checkBox1.setChecked(false);
+            checkBox2.setChecked(false);
+        }
+    }
+
+    private MessageBroadcastReceiver messageBroadcastReceiver = new MessageBroadcastReceiver();
+    private class MessageBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("RECEIVER-COSMIN", intent.getStringExtra(Constants.BROADCAST_RECEIVER_EXTRA));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("nume", editText1.getText().toString());
+        savedInstanceState.putString("grupa", editText2.getText().toString());
+        savedInstanceState.putString("textView", textView.getText().toString());
+        savedInstanceState.putString("checkbox1", String.valueOf(checkBox1.isChecked()));
+        savedInstanceState.putString("checkbox2", String.valueOf(checkBox2.isChecked()));
     }
 
     @Override
