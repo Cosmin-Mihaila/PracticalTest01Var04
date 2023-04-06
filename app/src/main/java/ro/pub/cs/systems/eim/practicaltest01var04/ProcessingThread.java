@@ -19,18 +19,18 @@ public class ProcessingThread extends Thread {
 
     public ProcessingThread(Context context, String nume2, String grupa2) {
         this.context = context;
-        this.nume = nume2;
-        this.grupa = grupa2;
+        nume = nume2;
+        grupa = grupa2;
     }
 
     @Override
     public void run() {
-        Log.d("THREAD-COSMIN", "Thread has started! PID: " + Process.myPid() + " TID: " + Process.myTid());
+        Log.d("cosm", "Thread has started! PID: " + Process.myPid() + " TID: " + Process.myTid());
         while (isRunning) {
             sendMessage();
             sleep();
         }
-        Log.d("THREAD-COSMIN-STOP", "Thread has stopped!");
+        Log.d("cosm", "Thread has stopped!");
     }
 
     private void sendMessage() {
@@ -43,7 +43,7 @@ public class ProcessingThread extends Thread {
 
     private void sleep() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         }

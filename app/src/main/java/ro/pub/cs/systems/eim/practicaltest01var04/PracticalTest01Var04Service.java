@@ -24,4 +24,9 @@ public class PracticalTest01Var04Service extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Override
+    public void onDestroy() {
+        processingThread.stopThread();
+    }
 }

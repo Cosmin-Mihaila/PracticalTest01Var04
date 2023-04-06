@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -17,12 +18,18 @@ public class PracticalTest01Var04 extends AppCompatActivity {
     private Button button1, button2;
     private TextView textView;
     private CheckBox checkBox1, checkBox2;
+
+    private IntentFilter intentFilter = new IntentFilter();
     private EditText editText1, editText2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test01_var04_main);
+
+        for (int index = 0; index < Constants.actionTypes.length; index++) {
+            intentFilter.addAction(Constants.actionTypes[index]);
+        }
 
         button1  = (Button)findViewById(R.id.button);
         button2 = findViewById(R.id.button4);
@@ -43,6 +50,10 @@ public class PracticalTest01Var04 extends AppCompatActivity {
         });
 
         button1.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), PracticalTest01Var04Service.class);
+            intent.putExtra("nume", editText1.getText().toString());
+            intent.putExtra("grupa", editText2.getText().toString());
+            getApplicationContext().startService(intent);
             String full = "";
             if(checkBox1.isChecked()){
                 String firstText = editText1.getText().toString();
@@ -64,10 +75,7 @@ public class PracticalTest01Var04 extends AppCompatActivity {
             }
             textView.setText(full);
 
-            Intent intent = new Intent(getApplicationContext(), PracticalTest01Var04Service.class);
-            intent.putExtra("nume", editText1.getText().toString());
-            intent.putExtra("grupa", editText2.getText().toString());
-            getApplicationContext().startService(intent);
+
 //                serviceStatus = Constants.SERVICE_STARTED;
         });
 
@@ -106,6 +114,27 @@ public class PracticalTest01Var04 extends AppCompatActivity {
             checkBox2.setChecked(false);
         }
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(messageBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(messageBroadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Intent intent = new Intent(this, PracticalTest01Var04Service.class);
+        stopService(intent);
+        super.onDestroy();
+    }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
